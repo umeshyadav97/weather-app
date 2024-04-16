@@ -63,9 +63,11 @@ const Home = () => {
     loadCountries()
   }, [])
 
-  window.addEventListener("load", function () {
-    navigator.geolocation.getCurrentPosition(myIP)
-  })
+  if (typeof window !== "undefined") {
+    window.addEventListener("load", function () {
+      navigator.geolocation.getCurrentPosition(myIP)
+    })
+  }
 
   const countryPhoto = async (country) => {
     const url = "https://api.unsplash.com/search/photos"
