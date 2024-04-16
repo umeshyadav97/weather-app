@@ -1,0 +1,38 @@
+.container {
+  border-top-left-radius: 32px;
+  border-bottom-left-radius: 32px;
+  padding: 30px 20px 0px 20px;
+ 
+}
+.tempText {
+  font-size: 32px !important;
+}
+.timeText {
+  color: #a9a9a9 !important;
+}
+
+.containe {
+  display: flex;
+  justify-content: center;
+}
+
+.imageContainer {
+  position: relative;
+  text-align: center;
+}
+
+.image {
+  width: 90%;
+  height: 60%;
+  border-radius: 16px;
+}
+
+.text {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  /* transform: translate(-50%, -50%); */
+  font-size: 1.25rem;
+  color: white;
+  /* Customize text color */
+}
