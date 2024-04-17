@@ -2,21 +2,19 @@
 import React, { useEffect, useState } from "react"
 import SideBar from "../../components/SideComponent"
 import styles from "./page.module.css"
-import { Grid } from "@mui/material"
 import PageComponent from "@local/components/PageComponent"
 import axios from "axios"
+import { Loader } from "@local/redux/dispatcher/Loader"
+import AppLoader from "@local/components/Loader/AppLoader"
 const Home = () => {
-  const API_KEY = "c30fa2d5b6301312b0293bce70fc2282"
+  const API_KEY = "2108884a9c36b243748500ddaba11d68"
   const [noData, setNoData] = useState()
   const [weatherData, setWeatherData] = useState([])
   const [city, setCity] = useState()
-  const [countryMatch, setCountryMatch] = useState([])
   const [weatherIcon, setWeatherIcon] = useState(`https://openweathermap.org/img/wn/10n@2x.png`)
   const [loading, setLoading] = useState(false)
-  const [searchString, setSearchString] = useState("")
-  const [countries, setCountries] = useState([])
-  const [showDropdown, setDropDown] = useState(false)
   const [selectedTab, setSelectedTab] = useState(0)
+  const [imageData, setImageData] = useState({})
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue)
@@ -26,68 +24,24 @@ const Home = () => {
     const { latitude, longitude } = location.coords
     getWhetherData([latitude, longitude])
   }
-  const searchCountries = (input) => {
-    // const {value}=input.target;
-    setDropDown(true)
-    setSearchString(input)
 
-    if (!input) {
-      // created if-else loop for matching countries according to the input
-      setCountryMatch([])
-    } else {
-      let matches = countries.filter((country) => {
-        // eslint-disable-next-line no-template-curly-in-string
-        const regex = new RegExp(`${input}`, "gi")
-        // console.log(regex)
-        return country.match(regex) || country.match(regex)
-      })
-      setCountryMatch(matches)
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    getWhetherData(searchString)
-  }
-
-  useEffect(() => {
-    const loadCountries = async () => {
-      const response = await axios.get("https://restcountries.com/v3.1/all")
-      let arr = []
-      response.data.forEach((element) => {
-        arr.push(element.name.official)
-      })
-      setCountries(arr)
-    }
-
-    loadCountries()
-  }, [])
-
-  if (typeof window !== "undefined") {
-    window.addEventListener("load", function () {
-      navigator.geolocation.getCurrentPosition(myIP)
-    })
-  }
+  window.addEventListener("load", function () {
+    navigator.geolocation.getCurrentPosition(myIP)
+  })
 
   const countryPhoto = async (country) => {
     const url = "https://api.unsplash.com/search/photos"
+    const clientId = "DAMCMRUzXUyOVNIQNKIpa7YVmVMoXWiGIMH_JX_Ul5E"
     try {
-      const res = await axios.get(
-        `${url}?query=${country}&client_id=${DAMCMRUzXUyOVNIQNKIpa7YVmVMoXWiGIMH_JX_Ul5E}`
-      )
+      const res = await axios.get(`${url}?query=${country}&client_id=${clientId}`)
       const resData = res.data
-      console.log(resData)
+      setImageData(resData)
     } catch (error) {
       console.error("Error fetching country photo:", error)
       setNoData("Location Not Found")
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    countryPhoto(city)
-  }, [city])
-
   const getWhetherData = async (location) => {
     setLoading(true)
     let search_type =
@@ -96,7 +50,7 @@ const Home = () => {
 
     try {
       const res = await axios.get(
-        `${url}?${search_type}&appid=${API_KEY}&units=metric&cnt=7&exclude=hourly,daily,`
+        `${url}?${search_type}&appid=${API_KEY}&units=metric&cnt=7&exclude=hourly,minutely,`
       )
       const whether_data = res.data
       if (whether_data.cod !== "200") {
@@ -123,7 +77,7 @@ const Home = () => {
       setTimeout(() => {
         setLoading(false)
       }, 500)
-      // countryPhoto(whether_data.city.country)
+      countryPhoto(whether_data.city.name)
       setCity(`${whether_data.city.name}, ${whether_data.city.country}`)
       setWeatherIcon(
         `${"https://openweathermap.org/img/wn/" + whether_data.list[0].weather[0]["icon"]}@4x.png`
@@ -133,26 +87,32 @@ const Home = () => {
       setLoading(false)
     }
   }
-
+  console.log(loading)
   return (
-    <div className={styles.pageContainer}>
-      <Grid container className={styles.container}>
-        <Grid item xs={12} className={styles.containerCard}>
-          <Grid container>
-            <Grid item xs={4}>
-              <SideBar city={city} weatherData={weatherData} getWhetherData={getWhetherData} />
-            </Grid>
-            <Grid item xs={8} className={styles.pagebackground}>
+    <div className="md:flex md:justify-center pt-5 h-full bg-gray-300">
+      {loading && <AppLoader />}
+      <div className="grid sm:w-full md:mx-20 md:my-10 md:w-full">
+        <div className={`${styles.containerCard} col-span-12`}>
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+            <div className="sm:col-span-4 ">
+              <SideBar
+                city={city}
+                weatherData={weatherData}
+                getWhetherData={getWhetherData}
+                imageData={imageData}
+              />
+            </div>
+            <div className="sm:col-span-8  bg-gray-100 md:rounded-tr-3xl md:rounded-br-3xl">
               <PageComponent
                 weatherData={weatherData}
                 weatherIcon={weatherIcon}
                 selectedTab={selectedTab}
                 handleTabChange={handleTabChange}
               />
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

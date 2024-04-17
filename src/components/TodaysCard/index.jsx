@@ -11,7 +11,7 @@ function TodaysCard({ data }) {
   const formattedSunset = moment(sunsetTimestamp).format("hh:mm A")
   return (
     <>
-      <div className="grid grid-cols-4 gap-4 pb-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 pb-3">
         <div className="col-span-2 bg-white rounded-xl mt-4 ">
           <div className="py-4">
             <span className="text-base px-8 py-2 text-gray-400">Wind Status</span>

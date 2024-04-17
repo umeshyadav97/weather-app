@@ -1,7 +1,6 @@
 "use client"
 import React, { useMemo, useState } from "react"
-import { Grid, Typography, Tabs, Tab } from "@mui/material"
-import Image from "next/image"
+import { Typography, Tabs, Tab } from "@mui/material"
 import DaysCard from "../DaysCard"
 import { RiCelsiusFill, RiFahrenheitFill } from "react-icons/ri"
 import styles from "./pageComponent.module.css"
@@ -23,19 +22,17 @@ function PageComponent({ weatherData, weatherIcon, handleTabChange, selectedTab 
   }
   return (
     <React.Fragment>
-      <Grid container className="px-5 pt-4">
-        <Grid item xs={8}>
-          <Grid container>
-            <Grid item xs={12} display="flex" justifyContent="start">
-              <Tabs value={selectedTab} onChange={handleTabChange} centered>
-                <Tab label="Today" />
-                <Tab label="Week" />
-              </Tabs>
-            </Grid>
-          </Grid>
-        </Grid>
+      <div className="px-5 pt-24 lg:pt-4 md:pt-4 sm:grid sm:grid-cols-12 sm:gap-4">
+        <div className="sm:col-span-8">
+          <div className="flex justify-start">
+            <Tabs value={selectedTab} onChange={handleTabChange} centered>
+              <Tab label="Today" />
+              <Tab label="Week" />
+            </Tabs>
+          </div>
+        </div>
 
-        <Grid item xs={2}>
+        <div className="hidden sm:block sm:col-span-2">
           <div className={styles.toggle_container}>
             <input
               type="checkbox"
@@ -49,46 +46,50 @@ function PageComponent({ weatherData, weatherIcon, handleTabChange, selectedTab 
               <div className={styles.ball} />
             </label>
           </div>
-        </Grid>
-        <Grid item xs={2} className="pt-2">
-          <Image
+        </div>
+
+        <div className="pt-2 hidden sm:block sm:col-span-2">
+          <img
             src="https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp"
             width={40}
             height={60}
             className="rounded"
+            alt="Profile"
           />
-        </Grid>
-      </Grid>
-      <Grid item className="px-8 pt-5">
-        {/* Content for the selected tab */}
-        {selectedTab === 0 && (
-          <div>
-            <DaysCard
-              data={weatherData}
-              weatherIcon={weatherIcon}
-              formatData={formatData}
-              degreeSymbol={degreeSymbol}
-            />
-          </div>
-        )}
-        {selectedTab === 1 && (
-          <div>
-            {" "}
-            <DaysCard
-              data={weatherData}
-              weatherIcon={weatherIcon}
-              formatData={formatData}
-              degreeSymbol={degreeSymbol}
-            />
-          </div>
-        )}
-      </Grid>
-      <Grid item className="pl-8 py-4">
-        <Typography className="text-base">Today's Highlights</Typography>
-      </Grid>
-      <Grid item className="px-8">
-        <TodaysCard data={weatherData} />
-      </Grid>
+        </div>
+
+        <div className=" pt-5 sm:col-start-1 sm:col-span-12">
+          {/* Content for the selected tab */}
+          {selectedTab === 0 && (
+            <div>
+              <DaysCard
+                data={weatherData}
+                weatherIcon={weatherIcon}
+                formatData={formatData}
+                degreeSymbol={degreeSymbol}
+              />
+            </div>
+          )}
+          {selectedTab === 1 && (
+            <div>
+              <DaysCard
+                data={weatherData}
+                weatherIcon={weatherIcon}
+                formatData={formatData}
+                degreeSymbol={degreeSymbol}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="py-4 sm:col-start-1 sm:col-span-12">
+          <Typography className="text-base">Today's Highlights</Typography>
+        </div>
+
+        <div className="sm:col-start-1 sm:col-span-12">
+          <TodaysCard data={weatherData} />
+        </div>
+      </div>
     </React.Fragment>
   )
 }

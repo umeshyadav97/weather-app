@@ -1,28 +1,32 @@
-"use client"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import Lottie from "lottie-react"
 import AnimationFile from "@local/assets/animations/default-loader.json"
-import styles from "./Loader.module.css"
-import { useSelector } from "react-redux"
-import { Typography } from "@mui/material"
 
-function AppLoader({ visible: isVisible = false }) {
-  const [showLoader, setLoader] = useState(false)
-  const { visible, message } = useSelector((store) => store.loader)
-  useEffect(() => {
-    if (!!visible || !!isVisible) {
-      setLoader(true)
-    } else {
-      setLoader(false)
-    }
-  }, [visible, isVisible])
-
-  if (!showLoader) return null
-
+const AppLoader = () => {
   return (
-    <div className={styles.loader}>
-      <Lottie animationData={AnimationFile} loop={true} />
-      {Boolean(message) && <Typography>{message}</Typography>}
+    <div
+      style={{
+        display: "block",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(255, 255, 255, 0.8)",
+        zIndex: 1000
+      }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)"
+        }}>
+        <div className="flex flex-col gap-6 justify-center w-full items-center">
+          <Lottie animationData={AnimationFile} loop={true} />
+          <h1 className="text-base">Loading...</h1>
+        </div>
+      </div>
     </div>
   )
 }

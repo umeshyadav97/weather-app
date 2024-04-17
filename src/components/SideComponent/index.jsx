@@ -2,17 +2,16 @@
 import React, { useEffect, useState } from "react"
 import { Grid, Typography, Divider } from "@mui/material"
 import styles from "./sideComponent.module.css"
-import WeatherIcon from "@local/assets/images/cloudy.svg"
-import Image from "next/image"
 import axios from "axios"
 import Search from "../Search"
 import moment from "moment"
+import { debounce } from "lodash"
 
-function SideBar({ weatherData, getWhetherData, city }) {
+function SideBar({ weatherData, getWhetherData, city, imageData }) {
   const [countries, setCountries] = useState([])
   const [searchString, setSearchString] = useState("")
   const [countryMatch, setCountryMatch] = useState([])
-  const searchCountries = (input) => {
+  const searchCountries = debounce((input) => {
     setSearchString(input)
     if (!input) {
       setCountryMatch([])
@@ -23,7 +22,7 @@ function SideBar({ weatherData, getWhetherData, city }) {
       })
       setCountryMatch(matches)
     }
-  }
+  }, 2)
 
   const handleKeyPress = (e) => {
     if (e?.key === "Enter") {
@@ -32,8 +31,6 @@ function SideBar({ weatherData, getWhetherData, city }) {
       console.log("dhfjskjskjksk")
     }
   }
-
-  console.log(weatherData)
 
   useEffect(() => {
     const loadCountries = async () => {
@@ -56,8 +53,6 @@ function SideBar({ weatherData, getWhetherData, city }) {
     return `${"https://openweathermap.org/img/wn/" + icon}@2x.png`
   }
 
-  // curl https://api.unsplash.com/search/photos?query=minimal █
-
   return (
     <React.Fragment>
       <Grid item className={styles.container}>
@@ -79,9 +74,6 @@ function SideBar({ weatherData, getWhetherData, city }) {
             alt="img"
           />
         </Grid>
-        <Grid item>
-          <Typography className={styles.tempText}>{city}</Typography>
-        </Grid>
         <Grid item className="pb-3">
           <Typography variant="h5">
             {moment().format("dddd")},{" "}
@@ -95,31 +87,19 @@ function SideBar({ weatherData, getWhetherData, city }) {
           <Grid item>
             <img
               src={day_icon(weatherData?.list?.[0]?.weather?.[0]["icon"])}
-              height={30}
-              width={30}
+              height={40}
+              width={40}
               alt="img"
             />
           </Grid>
-          <Grid item>
+          <Grid item display="flex" alignItems="center">
             <Typography>{weatherData?.list?.[0]?.weather?.[0]?.main}</Typography>
-          </Grid>
-        </Grid>
-        <Grid container className="pb-5 gap-2">
-          <Grid item>
-            <Image src={WeatherIcon} height={30} width={30} alt="img" />
-          </Grid>
-          <Grid item>
-            <Typography>Rain-30%</Typography>
           </Grid>
         </Grid>
         <Grid container className={styles.containe}>
           <Grid item xs={12} className={styles.imageContainer}>
-            <img
-              src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg"
-              alt="Image"
-              className={styles.image}
-            />
-            <div className={styles.text}>Your Text Here</div>
+            <img src={imageData?.results?.[0]?.urls?.thumb} alt="Image" className={styles.image} />
+            <div className={styles.text}>{city}</div>
           </Grid>
         </Grid>
       </Grid>
