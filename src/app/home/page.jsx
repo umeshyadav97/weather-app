@@ -24,10 +24,11 @@ const Home = () => {
     const { latitude, longitude } = location.coords
     getWhetherData([latitude, longitude])
   }
-
-  window.addEventListener("load", function () {
-    navigator.geolocation.getCurrentPosition(myIP)
-  })
+  if (typeof window !== "undefined") {
+    window.addEventListener("load", function () {
+      navigator.geolocation.getCurrentPosition(myIP)
+    })
+  }
 
   const countryPhoto = async (country) => {
     const url = "https://api.unsplash.com/search/photos"
@@ -87,7 +88,7 @@ const Home = () => {
       setLoading(false)
     }
   }
-  console.log(loading)
+
   return (
     <div className="md:flex md:justify-center pt-5 h-full bg-gray-300">
       {loading && <AppLoader />}
