@@ -5,6 +5,7 @@ import DaysCard from "../DaysCard"
 import { RiCelsiusFill, RiFahrenheitFill } from "react-icons/ri"
 import styles from "./pageComponent.module.css"
 import TodaysCard from "../TodaysCard"
+import HoursCard from "../HoursCard"
 
 function PageComponent({ weatherData, weatherIcon, handleTabChange, selectedTab }) {
   const [isFahrenheitMode, setIsFahrenheitMode] = useState(false)
@@ -62,7 +63,7 @@ function PageComponent({ weatherData, weatherIcon, handleTabChange, selectedTab 
           {/* Content for the selected tab */}
           {selectedTab === 0 && (
             <div>
-              <DaysCard
+              <HoursCard
                 data={weatherData}
                 weatherIcon={weatherIcon}
                 formatData={formatData}

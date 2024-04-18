@@ -23,12 +23,11 @@ const Home = () => {
   const myIP = (location) => {
     const { latitude, longitude } = location.coords
     getWhetherData([latitude, longitude])
+    setLoading(false)
   }
-  if (typeof window !== "undefined") {
-    window.addEventListener("load", function () {
-      navigator.geolocation.getCurrentPosition(myIP)
-    })
-  }
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(myIP)
+  }, [])
 
   const countryPhoto = async (country) => {
     const url = "https://api.unsplash.com/search/photos"

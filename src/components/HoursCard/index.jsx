@@ -1,16 +1,7 @@
 import moment from "moment"
-
-function DaysCard({ data, formatData, degreeSymbol }) {
+function HoursCard({ data, formatData, degreeSymbol }) {
   const day_icon = (icon) => {
     return `${"https://openweathermap.org/img/wn/" + icon}@2x.png`
-  }
-  const today = new Date()
-  const daysOfWeek = []
-
-  // Populate daysOfWeek array with day names starting from today
-  for (let i = 0; i < data?.list?.length; i++) {
-    const day = moment().add(i, "days").format("dddd") // Get the day name for each day starting from today
-    daysOfWeek.push(day)
   }
 
   return (
@@ -19,7 +10,7 @@ function DaysCard({ data, formatData, degreeSymbol }) {
         {data?.list?.map((day, index) => (
           <div key={index} className="bg-white rounded-xl mt-4">
             <div className="py-2 flex flex-col items-center justify-center">
-              <span className="text-sm">{daysOfWeek[index]}</span>
+              <span className="text-sm">{moment(day.dt_txt).format("hh:mm a")}</span>
               <div>
                 <img src={day_icon(day.weather[0]["icon"])} height={100} width={100} alt="img" />
               </div>
@@ -35,4 +26,4 @@ function DaysCard({ data, formatData, degreeSymbol }) {
   )
 }
 
-export default DaysCard
+export default HoursCard
