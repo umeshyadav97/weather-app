@@ -7,6 +7,7 @@ import Search from "../Search"
 import moment from "moment"
 import { debounce } from "lodash"
 import Image from "next/image"
+import placeholderImageSrc from "@local/assets/images/cloudy.svg"
 
 function SideBar({ weatherData, getWhetherData, city, imageData }) {
   const [countries, setCountries] = useState([])

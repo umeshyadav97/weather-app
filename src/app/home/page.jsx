@@ -23,7 +23,6 @@ const Home = () => {
   const myIP = (location) => {
     const { latitude, longitude } = location.coords
     getWhetherData([latitude, longitude])
-    setLoading(false)
   }
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(myIP)
@@ -39,7 +38,6 @@ const Home = () => {
     } catch (error) {
       console.error("Error fetching country photo:", error)
       setNoData("Location Not Found")
-      setLoading(false)
     }
   }
   const getWhetherData = async (location) => {
